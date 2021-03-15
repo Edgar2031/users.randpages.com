@@ -58,15 +58,16 @@ class RegistrationController extends Controller
                     }
                 try {
                     $parameters = array(
-                        'username' => $requestFields->username,
-                        'email' => $requestFields->email,
-                        'password' => md5($requestFields->password),
-                        'firstName' => $requestFields->firstName,
-                        'lastName' => $requestFields->lastname,
+                        'user' => array(
+                            'userName' => $requestFields->username,
+                            'email' => $requestFields->email,
+                            'password' => $requestFields->password,
+                            'firstName' => $requestFields->firstName,
+                            'lastName' => $requestFields->lastname,
+                            )
                     );
                     try {
-                        $response = $this->helper->postApiCall('post', $apiUrl, $parameters);
-
+                        $response = $this->helper->postApiCall('put', $apiUrl, $parameters);
                     } catch (\GuzzleHttp\Exception\RequestException $e){
                         $this->helper->logException($e, ' show() {RegistrationController}');
                         $result['code'] = 500;

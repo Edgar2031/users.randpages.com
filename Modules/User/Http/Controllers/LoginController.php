@@ -167,30 +167,33 @@ class LoginController extends Controller
                 } else {
                     if (str_contains($request->emailOrusername, '@')) {
                         $parameters = array(
-                            "email" => $request->emailOrusername,
-                            "password" => md5($request->password)
+                            "user" => $request->emailOrusername,
+                            "password" => $request->password
                         );
                     } else {
                         $parameters = array(
-                            "username" => $request->emailOrusername,
-                            "password" => md5($request->password)
+                            "user" => $request->emailOrusername,
+                            "password" => $request->password
                         );
                     }
 
                     try {
-                        $response = $this->helper->postApiCall('post', $apiUrl, $parameters);
+                         $response = $this->helper->postApiCall('post', $apiUrl, $parameters);
 
                     } catch (\GuzzleHttp\Exception\RequestException $e) {
+                        dd($this->helper->logException($e, ' show() {LoginController}'));
                         $this->helper->logException($e, ' show() {LoginController}');
                         $result['code'] = 500;
                         $result['message'] = 'Sorry some Error occured , Please reload the page';
                         return $result;
                     }
                     if ($response['code'] == 200) {
+
                         if ($response['code'] == 200) {
+
                             $data = array(
-                                'userDetails' => $response['data']['user'],
-                                'accessToken' => $response['data']['accessToken']
+                                'userDetails' => $response['user'],
+                                'accessToken' => $response['accessToken']
                             );
                             Session::put('user', $data);
                         }

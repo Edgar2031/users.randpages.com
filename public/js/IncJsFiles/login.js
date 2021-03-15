@@ -42,13 +42,11 @@ $(document).ready(function () {
             cache: false,
             contentType: false,
             success: function (response) {
-                console.log(response);
                 if (response['emailOrusername'] !== undefined) document.getElementById('validEmail').innerHTML = response['emailOrusername'];
                 if (response['password'] !== undefined) document.getElementById('validPassword').innerHTML = response['password'];
-
                 if (response.code == 200) {
                     document.getElementById("login_form").reset();
-                    if (response['message'] == 'success') {
+                    if (response.status == 'success') {
                         toastr.success("Your have logged in!", "Success");
                         setTimeout(function () {
                             window.location = '/dashboard';

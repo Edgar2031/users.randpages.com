@@ -763,7 +763,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 "use strict";
 // DOCS: https://javascript.info/cookie
 
-// Component Definition 
+// Component Definition
 var SBCookie = function() {
   return {
     // returns the cookie with the given name,
@@ -818,7 +818,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 "use strict";
 
-// Component Definition 
+// Component Definition
 var SBDialog = function(options) {
     // Main object
     var the = this;
@@ -1213,7 +1213,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 "use strict";
 
-// Component Definition 
+// Component Definition
 var SBImageInput = function(elementId, options) {
     // Main object
     var the = this;
@@ -10435,7 +10435,7 @@ var SBLayoutContent = function() {
 
         if (_element) {
             height = height - parseInt(SBUtil.css(_element, 'paddingTop')) - parseInt(SBUtil.css(_element, 'paddingBottom'));
-        }        
+        }
 
         height = height - SBLayoutHeader.getHeight();
         height = height - SBLayoutSubheader.getHeight();

@@ -175,6 +175,33 @@ class helper
                     return $response;
                 }
                 break;
+            case "put":
+                $result = [];
+                $response = null;
+                try {
+                    if ($is_multipart) {
+                        $response = $this->client->request('put', $api_url, [
+                            'multipart' => [
+                                [
+                                    'name' => $data['name'],
+                                    'contents' => fopen($data['file'], 'r')
+                                ]
+                            ],
+                        ]);
+                    } else {
+                        $response = $this->client->put($api_url, [RequestOptions::JSON => $data]);
+                    }
+                    if ($response->getStatusCode() == 200) {
+                        return json_decode($response->getBody()->getContents(), true);
+                    } else {
+                        return (['status' => 'failed', 'code' => 500, 'message' => 'The Server is temporarily unable to service your request due to maintenance downtime. Please try later']);
+                    }
+                } catch (Exception $e) {
+                    $response->code = 400;
+                    $response->message = $e->getMessage();
+                    return $response;
+                }
+                break;
             case "delete":
                 $response = null;
                 try {
@@ -246,16 +273,25 @@ class helper
         if ($response->code == 200) {
             $result['code'] = $response->code;
             $result['message'] = $response->message;
-            $result['data'] = $response->data;
+            if (isset($result['data']))
+            {
+                $result['data'] = $response->data;
+            }
         } else if ($response->code == 400) {
             $result['code'] = $response->code;
             $result['message'] = $response->message;
             $result['error'] = $response->error;
-            $result['data'] = $response->data;
+            if (isset($result['data']))
+            {
+                $result['data'] = $response->data;
+            }
         } else {
             $result['code'] = $response->code;
             $result['message'] = $response->error;
-            $result['data'] = $response->data;
+            if (isset($result['data']))
+            {
+                $result['data'] = $response->data;
+            }
         }
         return $result;
     }
@@ -265,16 +301,32 @@ class helper
         if ($response['code'] == 200) {
             $result['code'] = $response['code'];
             $result['message'] = $response['message'];
-            $result['data'] = $response['data'];
+            if (isset($result['data']))
+            {
+                $result['data'] = $response['data'];
+            }
         } else if ($response['code'] == 400) {
             $result['code'] = $response['code'];
             $result['message'] = $response['message'];
-            $result['data'] = $response['data'];
-            $result['error'] = $response['error'];
+            if (isset($result['data']))
+            {
+                $result['data'] = $response['data'];
+            }
+            if (isset($result['error']))
+            {
+                $result['error'] = $response['error'];
+            }
         } else {
             $result['code'] = $response['code'];
             $result['message'] = $response['error'];
-            $result['data'] = $response['data'];
+            if (isset($result['data']))
+            {
+                $result['data'] = $response['data'];
+            }
+            if (isset($result['error']))
+            {
+                $result['error'] = $response['error'];
+            }
         }
         return $result;
     }
@@ -308,8 +360,10 @@ class helper
 
     public function logException($exception, $functionName)
     {
+        dd($exception);
         Log::info('Exception ' . $exception->getLine() . " => Function Name => " . $functionName . " => code =>" . $exception->getCode() . " => message =>  " . $exception->getMessage());
     }
+
 
     public function guzzleErrorHandler($guzzleException, $functionName)
     {

@@ -247,9 +247,10 @@
             $regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
             if ($regex.test($('#email').val())) {
                 $.ajax({
-                    url: 'http://localhost:5000/v1/checkEmailAvailability?email=' + $('#email').val(),
+                    url: 'https://user.ems.globusdemos.com/v1/checkEmailAvailability?email=' + $('#email').val(),
                     type: 'GET',
                     success: function (response) {
+                        console.log(response)
                         if (response['code'] == 200) {
                             $('#emailField').html('✅ Valid Email').css('color', 'green');
                         }
@@ -269,7 +270,7 @@
 
         $("#password").on('keyup', function () {
             $('#validPassword').hide()
-            $regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+            $regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&-/])[A-Za-z\d@$!%*?&-/]{8,}$/
             if ($regex.test($('#password').val())) {
                 $('#message').html('👌 Valid password').css('color', 'green');
             } else {
@@ -313,6 +314,9 @@
                         $("#message").empty();
                         $("#conf_password").empty();
                         toastr.success(response.message, "Registered Successfully!");
+                        setTimeout(function () {
+                            window.location = '/login';
+                        }, 1000);
                     } else if (response['code'] == 400) {
                         toastr.error(response.message, "Registration failed!!");
                     } else if(response.code == 500){

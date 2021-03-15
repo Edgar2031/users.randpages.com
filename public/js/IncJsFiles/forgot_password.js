@@ -15,6 +15,9 @@ let forgotPasswordSubmit = function () {
             if (response.code === 200) {
                 toastr.success(response.message);
                 $('#forgotPasswordEmailId').val("");
+                setTimeout(function () {
+                    window.location = '/login';
+                }, 1000);
             } else if (response.code === 201) {
                 $("#forgotPasswordEmailError1").html(response.msg[0]);
             } else {
