@@ -693,8 +693,8 @@
                                 @else
                                     @if(isset($accounts) && $accounts['code'] === 200)
                                         <?php $count = 0; ?>
-                                        @if(count($accounts['data'] [0][0]->SocialAccount)!==0)
-                                            @foreach($accounts['data'] [0][0]->SocialAccount as $account)
+                                        @if(isset($accounts['data']) && count($accounts['data'][0][0]->SocialAccount)!==0)
+                                            @foreach($accounts['data'][0][0]->SocialAccount as $account)
                                                 <?php if ($count == 5) break; ?>
                                             <!--begin::Item-->
                                                 @if($account->join_table_teams_social_accounts->is_account_locked == true)

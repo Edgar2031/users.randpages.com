@@ -920,7 +920,8 @@
                     </div>
                     <div class="d-flex flex-column">
                         <a href="#" class="font-weight-bold font-size-h5 text-hover-primary">
-                            <?php if(isset(session()->get('user')['userDetails']['first_name'])) echo session()->get('user')['userDetails']['first_name']; else  echo 'N/A' ?>
+                            {!! authUser()->has() ? authUser()->user()->first_name : 'N/A'!!}
+
                         </a>
                         <div class="text-muted mt-1">
                             UX/UI
@@ -934,7 +935,8 @@
                                     </span>
                                 </span>
                                 <span
-                                    class="navi-text text-hover-primary">                            <?php if(isset(session()->get('user')['userDetails']['email'])) echo session()->get('user')['userDetails']['email']; else  echo 'N/A' ?>
+                                    class="navi-text text-hover-primary">
+                                        {!! authUser()->has() ? authUser()->user()->email : 'N/A'!!}
 </span>
                             </span>
                             </a>

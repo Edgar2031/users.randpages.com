@@ -2,6 +2,7 @@
 
 namespace Modules\User\Http\Controllers;
 
+use App\Classes\AuthUsers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -222,7 +223,7 @@ class LoginController extends Controller
                         'userDetails' => (array)$response->data->user,
                         'accessToken' => $response->data->accessToken
                     );
-                    Session::put('user', $user);
+                    AuthUsers::login($user);
                     return redirect('dashboard');
                 } else if ($response->code === 400) {
                     return redirect('login')->with('invalidSocial', $response['data']->message);

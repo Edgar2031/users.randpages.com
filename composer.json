@@ -44,6 +44,10 @@
         },
         "classmap": [
             "app/Classes"
+        ],
+        "files": [
+            "app/Classes/AuthUsers.php",
+            "app/AuthUsers/main.php"
         ]
     },
     "autoload-dev": {

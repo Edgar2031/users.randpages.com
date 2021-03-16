@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Classes\AuthUsers;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Blade::directive('authUserid', function () {
+            return AuthUsers::id();
+        });
     }
 }
