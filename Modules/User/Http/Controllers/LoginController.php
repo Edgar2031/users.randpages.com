@@ -2,6 +2,7 @@
 
 namespace Modules\User\Http\Controllers;
 
+use App\ApiConfig\ApiConfig;
 use App\Classes\AuthUsers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -15,15 +16,12 @@ use Modules\User\Helper;
 class LoginController extends Controller
 {
 
-    protected $API_URL;
     protected $helper;
     public $requestToken = "";
     public $requestSecret = "";
 
     public function __construct()
     {
-        $this->API_URL = env('API_URL');
-        $this->API_VERSION = env('API_VERSION');
         $this->helper = Helper::getInstance();
     }
 
@@ -31,7 +29,7 @@ class LoginController extends Controller
     {
         if ($network == "Google" || $network == "Facebook" || $network == "Twitter" || $network == "GitHub") {
             try {
-                $apiUrl = $this->API_URL . env('API_VERSION') . '/socialLogin?network=' . $network;
+                $apiUrl = ApiConfig::get('/socialLogin?network=' . $network);
                 try {
                     $response = $this->helper->postApiCall('GET', $apiUrl);
                     if ($response->code === 200) {
@@ -62,14 +60,14 @@ class LoginController extends Controller
     public function facebookCallBack(Request $request)
     {
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/facebook-callback?code=' . $request['code'];
+            $apiUrl = ApiConfig::get('/facebook-callback?code=' . $request['code']);
             try {
                 $response = $this->helper->postApiCall('GET', $apiUrl);
                 $user = array(
                     'userDetails' => (array)$response->data->user,
                     'accessToken' => $response->data->accessToken
                 );
-                Session::put('user', $user);
+                AuthUsers::login($user);
 
                 if ($response->code === 200) {
 
@@ -92,7 +90,7 @@ class LoginController extends Controller
     public function googleCallBack(Request $request)
     {
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/google-callback?code=' . $request['code'];
+            $apiUrl =ApiConfig::get('/google-callback?code=' . $request['code']);
             try {
                 $response = $this->helper->postApiCall('GET', $apiUrl);
                 if ($response->code === 200) {
@@ -100,7 +98,7 @@ class LoginController extends Controller
                         'userDetails' => (array)$response->data->user,
                         'accessToken' => $response->data->accessToken
                     );
-                    Session::put('user', $user);
+                    AuthUsers::login($user);
                     return redirect('dashboard');
                 } else if ($response->code === 400) {
                     return redirect('login')->with('invalidSocial', $response->message);
@@ -120,7 +118,7 @@ class LoginController extends Controller
     public function gitHubCallBack(Request $request)
     {
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/github-callback?code=' . $request['code'];
+            $apiUrl = ApiConfig::get('/github-callback?code=' . $request['code']);
             try {
                 $response = $this->helper->postApiCall('GET', $apiUrl);
                 if ($response->code === 200) {
@@ -128,7 +126,7 @@ class LoginController extends Controller
                         'userDetails' => (array)$response->data->user,
                         'accessToken' => $response->data->accessToken
                     );
-                    Session::put('user', $user);
+                    AuthUsers::login($user);
                     return redirect('dashboard');
                 } else if ($response->code === 400) {
                     return redirect('login')->with('invalidSocial', $response['data']->message);
@@ -147,10 +145,10 @@ class LoginController extends Controller
 
     public function show(Request $request)
     {
-        $apiUrl = $this->API_URL . env('API_VERSION') . '/login';
+        $apiUrl = ApiConfig::get('/login');
 
         if ($request->isMethod('get')) {
-            if (Session::has('user')) {
+            if (AuthUsers::has()) {
                 return view('home::Userdashboard');
             } else {
                 return view("user::login");
@@ -191,7 +189,7 @@ class LoginController extends Controller
                             'userDetails' => $response['user'],
                             'accessToken' => $response['accessToken']
                         );
-                        Session::put('user', $data);
+                        AuthUsers::login($data);
                         return $response;
                     } else if($response['code'] == 400){
                         return $response;
@@ -215,7 +213,7 @@ class LoginController extends Controller
         try {
             $requestToken = Session::get('requestToken');
             $requestSecret = Session::get('requestSecret');
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/twitter-callback?requestToken=' . $requestToken . '&requestSecret=' . $requestSecret . '&verifier=' . $request['oauth_verifier'];
+            $apiUrl = ApiConfig::get('/twitter-callback?requestToken=' . $requestToken . '&requestSecret=' . $requestSecret . '&verifier=' . $request['oauth_verifier']);
             try {
                 $response = $this->helper->postApiCall('GET', $apiUrl);
                 if ($response->code === 200) {
@@ -242,7 +240,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        Session::flush();
+        authUser()->logout();
         return Redirect::to('login');
     }
 
@@ -271,7 +269,7 @@ class LoginController extends Controller
                 $response['data'] = null;
                 return Response::json($response, 200);
             }
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/forgotPassword?email=' . $request->input("emailID");
+            $apiUrl = ApiConfig::get('/forgotPassword?email=' . $request->input("emailID"));
             try {
                 $response = $this->helper->postApiCall('get', $apiUrl);
                 return $this->helper->responseHandler($response);
@@ -300,7 +298,7 @@ class LoginController extends Controller
                 $response['data'] = null;
                 return redirect("forgot-password")->with('message', $response["message"]);
             }
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/verifyPasswordToken?email=' . $request->input("email") . '&activationToken=' . $request->input("activationToken");
+            $apiUrl = ApiConfig::get('/verifyPasswordToken?email=' . $request->input("email") . '&activationToken=' . $request->input("activationToken"));
             try {
                 $response = $this->helper->postApiCall('get', $apiUrl);
                 $response = $this->helper->responseHandler($response);
@@ -334,7 +332,7 @@ class LoginController extends Controller
                 $response['data'] = null;
                 return Response::json($response, 200);
             }
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/resetPassword?email=' . $request->input("email") . '&newPassword=' . $request->input("new_password");
+            $apiUrl = ApiConfig::get('/resetPassword?email=' . $request->input("email") . '&newPassword=' . $request->input("new_password"));
             try {
                 $response = $this->helper->postApiCall('post', $apiUrl);
                 return $this->helper->responseHandlerwithArray($response);
@@ -361,7 +359,7 @@ class LoginController extends Controller
                 $response['data'] = null;
                 return Response::json($response, 200);
             }
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/directLoginMail?email=' . $request->input("emailID");
+            $apiUrl = ApiConfig::get('/directLoginMail?email=' . $request->input("emailID"));
             try {
                 $response = $this->helper->postApiCall('get', $apiUrl);
                 return $this->helper->responseHandler($response);
@@ -390,7 +388,7 @@ class LoginController extends Controller
                 $response['data'] = null;
                 return redirect("forgot-password")->with('message', $response["message"]);
             }
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/verifyDirectLoginToken?email=' . $request->input("email") . '&activationToken=' . $request->input("activationToken");
+            $apiUrl = ApiConfig::get('/verifyDirectLoginToken?email=' . $request->input("email") . '&activationToken=' . $request->input("activationToken"));
             try {
                 $response = $this->helper->postApiCall('get', $apiUrl);
                 $response = $this->helper->responseHandler($response);
@@ -426,7 +424,7 @@ class LoginController extends Controller
                 $response['data'] = null;
                 return Response::json($response, 200);
             }
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/directLogin';
+            $apiUrl =ApiConfig::get('/directLogin');
             try {
                 $response = $this->helper->postApiCall('post', $apiUrl, $email);
                 if ($response['code'] == 200) {
@@ -434,7 +432,7 @@ class LoginController extends Controller
                         'user' => $response['user'],
                         'accessToken' => $response['accessToken']
                     );
-                    Session::put('user', $data);
+                    AuthUsers::login($data);
                     return;
                 } else  return view('user::login', ['result' => $response['message'], 'code' => $response['code']]);
             } catch (\GuzzleHttp\Exception\RequestException $e) {

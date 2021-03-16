@@ -2,6 +2,7 @@
 
 namespace Modules\User\Http\Controllers;
 
+use App\ApiConfig\ApiConfig;
 use App\Traits\RegisterUser;
 use App\Http\Requests\RegistrationRequest;
 use Illuminate\Support\Facades\Http;
@@ -16,11 +17,9 @@ use Modules\User\helper;
 class RegistrationController extends Controller
 {
     private $helper;
-    private $API_URL;
 
     public function __construct()
     {
-        $this->API_URL = env('API_URL');
         $this->helper = Helper::getInstance();
     }
 
@@ -50,7 +49,7 @@ class RegistrationController extends Controller
                     'lastname.regex' => 'Last Name should not contain special characters.'
                 ];
 
-                    $apiUrl = $this->API_URL . env('API_VERSION') . '/register';
+                    $apiUrl = ApiConfig::get('/register');
                     $validator = Validator::make($requestFields->all(), $rules, $customMessage);
 
                     if ($validator->fails()) {
@@ -98,7 +97,7 @@ class RegistrationController extends Controller
     }
 
     public function verify(Request $request){
-        $apiUrl = $this->API_URL . env('API_VERSION') . '/verifyEmail';
+        $apiUrl = ApiConfig::get('/verifyEmail');
         $email = $request['email'];
         $activationToken = $request['activationToken'];
 

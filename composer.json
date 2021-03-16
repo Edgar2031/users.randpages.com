@@ -47,7 +47,9 @@
         ],
         "files": [
             "app/Classes/AuthUsers.php",
-            "app/AuthUsers/main.php"
+            "app/AuthUsers/main.php",
+            "app/ApiConfig/Apiconfig.php",
+            "app/ApiConfig/config.php"
         ]
     },
     "autoload-dev": {

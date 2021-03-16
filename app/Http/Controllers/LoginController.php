@@ -18,7 +18,7 @@ class LoginController extends Controller
 
     public function authenticate(Request $requestFields)
     {
-        $response = Http::post('http://localhost:3000/api/v1/login', [
+        $response = Http::post(ApiConfig::get('/login'), [
             'email' => $requestFields->email,
             'password' => $requestFields->password,
         ]);

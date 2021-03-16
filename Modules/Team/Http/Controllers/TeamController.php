@@ -2,6 +2,7 @@
 
 namespace Modules\Team\Http\Controllers;
 
+use App\ApiConfig\ApiConfig;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -10,18 +11,14 @@ use Modules\User\helper;
 class TeamController extends Controller
 {
     protected $helper;
-    private $API_URL;
-    protected $API_VERSION;
 
     public function __construct()
     {
-        $this->API_URL = env('API_URL');
         $this->helper = Helper::getInstance();
-        $this->API_VERSION = env('API_VERSION');
     }
     public function viewTeams()
     {
-        $apiUrl = $this->API_URL . env('API_VERSION') . '/team/getDetails';
+        $apiUrl = ApiConfig::get('/team/getDetails');
         try {
             $response = $this->helper->postApiCallWithAuth('get', $apiUrl);
             if ($response['code'] === 200) {

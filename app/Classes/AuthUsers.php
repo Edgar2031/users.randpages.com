@@ -49,7 +49,7 @@ class AuthUsers
     }
 
     public static function logout() {
-        session()->flash('user');
+        Session::flush();
         return true;
     }
     public static function  this()

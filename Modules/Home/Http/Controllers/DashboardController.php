@@ -2,6 +2,7 @@
 
 namespace Modules\Home\Http\Controllers;
 
+use App\ApiConfig\ApiConfig;
 use App\Models\User;
 use App\Traits\RegisterUser;
 use App\Http\Requests\RegistrationRequest;
@@ -12,20 +13,16 @@ use Modules\User\helper;
 class DashboardController extends Controller
 {
     protected $helper;
-    private $API_URL;
-    protected $API_VERSION;
 
     public function __construct()
     {
-        $this->API_URL = env('API_URL');
         $this->helper = Helper::getInstance();
-        $this->API_VERSION = env('API_VERSION');
     }
 
     public function index()
     {
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/team/getDetails';
+            $apiUrl = ApiConfig::get('/team/getDetails');
             try {
                 $response = $this->helper->postApiCallWithAuth('get', $apiUrl);
                 if ($response['code'] === 200) {
@@ -54,7 +51,7 @@ class DashboardController extends Controller
     public function lockAccount($id)
     {
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/team/lockProfiles';
+            $apiUrl = ApiConfig::get('/team/lockProfiles');
             $parameters = [$id];
             $response = $this->helper->postApiCallWithAuth('put', $apiUrl, $parameters);
             if ($response['statusCode'] == 200) {
@@ -68,7 +65,7 @@ class DashboardController extends Controller
     public function unlockAccount($id)
     {
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/team/unlockProfiles';
+            $apiUrl = ApiConfig::get('/team/unlockProfiles');
             $parameters = [$id];
             $response = $this->helper->postApiCallWithAuth('put', $apiUrl, $parameters);
             if ($response['statusCode'] == 200) {
@@ -84,7 +81,7 @@ class DashboardController extends Controller
     {
         try {
             try {
-                $apiUrl = $this->API_URL . env('API_VERSION') . '/team/getDetails';
+                $apiUrl = ApiConfig::get('/team/getDetails');
                 $response = $this->helper->postApiCallWithAuth('get', $apiUrl);
                 return view('home::Accounts.accounts')->with(["accounts" => $response["data"]]);
             } catch (\GuzzleHttp\Exception\RequestException $e) {
@@ -103,7 +100,7 @@ class DashboardController extends Controller
         $teamid = ($this->helper->getTeamNewSession())['teamid'];
         if ($teamid !== 0) {
             try {
-                $apiUrl = $this->API_URL . env('API_VERSION') . '/team/getProfileRedirectUrl?teamId=' . $teamid . '&network=' . $network;
+                $apiUrl = ApiConfig::get('/team/getProfileRedirectUrl?teamId=' . $teamid . '&network=' . $network);
                 $response = $this->helper->postApiCallWithAuth('get', $apiUrl);
                 if ($response['code'] === 200) {
                     session::put('state', $response['data']->state);
@@ -133,7 +130,7 @@ class DashboardController extends Controller
     {
         $state = session::get('state');
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/team/addSocialProfile?state=' . $state . '&code=' . $request['oauth_verifier'];
+            $apiUrl = ApiConfig::get('/team/addSocialProfile?state=' . $state . '&code=' . $request['oauth_verifier']);
             $response = $this->helper->postApiCallWithAuth('get', $apiUrl);
             return redirect('dashboard');
         } catch (\Exception $e) {
@@ -146,7 +143,7 @@ class DashboardController extends Controller
     {
         $state = session::get('state');
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/team/addSocialProfile?state=' . $state . '&code=' . $request['code'];
+            $apiUrl = ApiConfig::get('/team/addSocialProfile?state=' . $state . '&code=' . $request['code']);
             $response = $this->helper->postApiCallWithAuth('get', $apiUrl);
             if ($response['data']->code === 200) {
                 return redirect('dashboard')->with(["success" => 'Added Account Successfully']);
@@ -166,7 +163,7 @@ class DashboardController extends Controller
     {
         $state = session::get('state');
         try {
-            $apiUrl = $this->API_URL . env('API_VERSION') . '/team/addSocialProfile?state=' . $state . '&code=' . $request['code'];
+            $apiUrl = ApiConfig::get('/team/addSocialProfile?state=' . $state . '&code=' . $request['code']);
             $response = $this->helper->postApiCallWithAuth('get', $apiUrl);
             return redirect('dashboard');
         } catch (\Exception $e) {
@@ -178,7 +175,7 @@ class DashboardController extends Controller
 
     public function updateRating(Request $request)
     {
-        $api_url = $this->API_URL . $this->API_VERSION . '/team/updateRatings?accountId=' . $request->accountId . '&rating=' . $request->rating;
+        $api_url = ApiConfig::get('/team/updateRatings?accountId=' . $request->accountId . '&rating=' . $request->rating);
         $method = "PUT";
         $data = ($request->all());
         try {
@@ -191,7 +188,7 @@ class DashboardController extends Controller
 
     public function updateCron(Request $request)
     {
-        $api_url = $this->API_URL . $this->API_VERSION . '/team/updateFeedsCron?accountId=' . $request->accountId . '&cronvalue=' . $request->cronvalue;
+        $api_url = ApiConfig::get('/team/updateFeedsCron?accountId=' . $request->accountId . '&cronvalue=' . $request->cronvalue);
         $method = "PUT";
         $data = ($request->all());
         try {

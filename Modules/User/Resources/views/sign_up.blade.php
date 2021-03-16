@@ -221,7 +221,7 @@
             $regex = /^[a-zA-Z0-9-_]{3,32}$/
             if ($regex.test($('#username').val())) {
                 $.ajax({
-                    url: 'http://localhost:5000/v1/checkUserNameAvailability?usernanme=' + $('#username').val(),
+                    url: "{!! ApiConfig::get() !!}" + '/checkUserNameAvailability?usernanme=' + $('#username').val(),
                     type: 'GET',
                     processData: false,
                     contentType: false,
@@ -247,7 +247,7 @@
             $regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
             if ($regex.test($('#email').val())) {
                 $.ajax({
-                    url: 'https://user.ems.globusdemos.com/v1/checkEmailAvailability?email=' + $('#email').val(),
+                    url: "{!! ApiConfig::get() !!}"+'/checkEmailAvailability?email=' + $('#email').val(),
                     type: 'GET',
                     success: function (response) {
                         console.log(response)

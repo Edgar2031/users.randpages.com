@@ -20,7 +20,7 @@ class RegistrationController extends Controller
 
     public function register(Request $requestFields)
     {
-        $response = Http::post('http://localhost:3000/api/v1/register', [
+        $response = Http::post(ApiConfig::get('/register'), [
             'email' => $requestFields->email,
             'password' => $requestFields->password,
             'name' => $requestFields->fullname,
