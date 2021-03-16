@@ -179,24 +179,18 @@ class LoginController extends Controller
 
                     try {
                          $response = $this->helper->postApiCall('post', $apiUrl, $parameters);
-
                     } catch (\GuzzleHttp\Exception\RequestException $e) {
-                        dd($this->helper->logException($e, ' show() {LoginController}'));
                         $this->helper->logException($e, ' show() {LoginController}');
                         $result['code'] = 500;
                         $result['message'] = 'Sorry some Error occured , Please reload the page';
                         return $result;
                     }
                     if ($response['code'] == 200) {
-
-                        if ($response['code'] == 200) {
-
-                            $data = array(
-                                'userDetails' => $response['user'],
-                                'accessToken' => $response['accessToken']
-                            );
-                            Session::put('user', $data);
-                        }
+                        $data = array(
+                            'userDetails' => $response['user'],
+                            'accessToken' => $response['accessToken']
+                        );
+                        Session::put('user', $data);
                         return $response;
                     } else if($response['code'] == 400){
                         return $response;

@@ -691,7 +691,7 @@
                                         {{$ErrorMessage}}
                                     </div>
                                 @else
-                                    @if($accounts['code'] === 200)
+                                    @if(isset($accounts) && $accounts['code'] === 200)
                                         <?php $count = 0; ?>
                                         @if(count($accounts['data'] [0][0]->SocialAccount)!==0)
                                             @foreach($accounts['data'] [0][0]->SocialAccount as $account)
@@ -820,7 +820,7 @@
                                                                     Currently no Account has been added for this team
                                                                 </div>
                                                             @endif
-                                                            @elseif($accounts['code'] === 400)
+                                                            @elseif(isset($accounts) && $accounts['code'] === 400)
                                                                 <div style="color: Red;text-align:center;">
                                                                     Can not get Accounts,please reload the page
                                                                 </div>

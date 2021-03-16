@@ -272,23 +272,32 @@ class helper
     {
         if ($response->code == 200) {
             $result['code'] = $response->code;
-            $result['message'] = $response->message;
-            if (isset($result['data']))
+            if(isset($response->message))
+            {
+                $result['message'] = $response->message;
+            }
+            if (isset($response->data))
             {
                 $result['data'] = $response->data;
             }
         } else if ($response->code == 400) {
             $result['code'] = $response->code;
-            $result['message'] = $response->message;
+            if(isset($response->message))
+            {
+                $result['message'] = $response->message;
+            }
             $result['error'] = $response->error;
-            if (isset($result['data']))
+            if (isset($response->data))
             {
                 $result['data'] = $response->data;
             }
         } else {
             $result['code'] = $response->code;
-            $result['message'] = $response->error;
-            if (isset($result['data']))
+            if(isset($response->message))
+            {
+                $result['message'] = $response->message;
+            }
+            if (isset($response->data))
             {
                 $result['data'] = $response->data;
             }
@@ -300,30 +309,39 @@ class helper
     {
         if ($response['code'] == 200) {
             $result['code'] = $response['code'];
-            $result['message'] = $response['message'];
-            if (isset($result['data']))
+            if(isset($response['message']))
+            {
+                $result['message'] = $response['message'];
+            }
+            if(isset($response['data']))
             {
                 $result['data'] = $response['data'];
             }
         } else if ($response['code'] == 400) {
             $result['code'] = $response['code'];
-            $result['message'] = $response['message'];
-            if (isset($result['data']))
+            if (isset($response['message']))
+            {
+                $result['message'] = $response['message'];
+            }
+            if (isset($response['data']))
             {
                 $result['data'] = $response['data'];
             }
-            if (isset($result['error']))
+            if (isset($response['error']))
             {
                 $result['error'] = $response['error'];
             }
         } else {
             $result['code'] = $response['code'];
-            $result['message'] = $response['error'];
-            if (isset($result['data']))
+            if (isset($response['message']))
+            {
+                $result['message'] = $response['message'];
+            }
+            if (isset($response['data']))
             {
                 $result['data'] = $response['data'];
             }
-            if (isset($result['error']))
+            if (isset($response['error']))
             {
                 $result['error'] = $response['error'];
             }
@@ -360,7 +378,6 @@ class helper
 
     public function logException($exception, $functionName)
     {
-        dd($exception);
         Log::info('Exception ' . $exception->getLine() . " => Function Name => " . $functionName . " => code =>" . $exception->getCode() . " => message =>  " . $exception->getMessage());
     }
 

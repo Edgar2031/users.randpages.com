@@ -24,7 +24,6 @@ class TeamController extends Controller
         $apiUrl = $this->API_URL . env('API_VERSION') . '/team/getDetails';
         try {
             $response = $this->helper->postApiCallWithAuth('get', $apiUrl);
-            dd($response);
             if ($response['code'] === 200) {
                 $responseData = $this->helper->responseHandler($response['data']);
                 return view('team::view_teams')->with(["accounts" => $responseData]);

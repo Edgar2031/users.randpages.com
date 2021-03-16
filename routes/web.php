@@ -43,3 +43,5 @@ Route::get('/', function () {
 //     ->middleware('role:user');
 // Route::get('/logout', [LoginController::class, 'logout']);
 // });
+
+
