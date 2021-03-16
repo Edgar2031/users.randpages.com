@@ -45,8 +45,8 @@
     </div>
     <!--end::Forgot-->
 @endsection
-<script src="../js/IncJsFiles/reset_password.js"></script>
+<script src="{{asset('../js/IncJsFiles/reset_password.js')}}"></script>
 <script>
-    let APP_URL = '{{env('APP_URL')}}';
-    var email = '{{session()->get('email')}}';
+    let APP_URL = '{{authUsers()->get()}}';
+    var email = '{{authUsers()->user()->email}}';
 </script>

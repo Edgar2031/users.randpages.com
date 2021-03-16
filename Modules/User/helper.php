@@ -2,6 +2,7 @@
 
 namespace Modules\User;
 
+use App\ApiConfig\ApiConfig;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Facades\Session;
@@ -17,7 +18,6 @@ class helper
 
     private function __construct()
     {
-        $this->API_URL = env('API_URL');
         $this->client = new Client();
     }
 
@@ -354,7 +354,7 @@ class helper
         $teamid = 0;
         $teamname = "";
         $teamDetails = [];
-        $apiUrl = $this->API_URL . env('API_VERSION') . '/team/getDetails';
+        $apiUrl =  ApiConfig::get('/team/getDetails');
         $response = $this->postApiCallWithAuth('get', $apiUrl);
         if ($response['code'] === 200) {
             if ($response['data']->code === 200) {

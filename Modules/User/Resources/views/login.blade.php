@@ -188,5 +188,5 @@
     <!--end::Signin-->
 @endsection
 
-<script src="../js/IncJsFiles/login.js"></script>
+<script src="{{asset('../js/IncJsFiles/login.js')}}"></script>
 
