@@ -1,5 +1,5 @@
 <?php
 
-//function apiConfig() {
-//    return \App\ApiConfig\ApiConfig::get('null');
-//}
+function apiConfig() {
+    return \App\ApiConfig\ApiConfig::get('null');
+}

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Modules\User\Helper;
+use Modules\User\helper;
 
 
 class LoginController extends Controller
@@ -22,7 +22,7 @@ class LoginController extends Controller
 
     public function __construct()
     {
-        $this->helper = Helper::getInstance();
+        $this->helper = helper::getInstance();
     }
 
     public function social($network)

@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Facades\Session;
 use Mockery\CountValidator\Exception;
-Use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
 class helper
 {
