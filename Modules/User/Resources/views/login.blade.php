@@ -143,7 +143,8 @@
             <!-- end:Email login button -->
             <!-- Facebook login button -->
             <div>
-                <button type="button" class="btn bg-facebook font-weight-bolder pl-20 pr-20 mt-5 font-size-h6" onclick="location.href='{{authUser()->get()}}/social/Facebook'">
+
+                <button type="button" class="btn bg-facebook font-weight-bolder pl-20 pr-20 mt-5 font-size-h6" onclick="location.href='{{ApiConfig::get()}}/Sociallogin?network=facebook'">
                                     <span class="svg-icon svg-icon-md">
                                         <i class="fab fa-facebook"> </i>
                                     </span>
@@ -153,7 +154,7 @@
             <!-- end:Facebook login button -->
             <!-- Google login button -->
             <div>
-                <button type="button" class="btn bg-google font-weight-bolder pl-20 pr-20 mt-5 font-size-h6"  onclick="location.href='{{authUser()->get()}}/social/Google'">
+                <button type="button" class="btn bg-google font-weight-bolder pl-20 pr-20 mt-5 font-size-h6"  onclick="location.href='{{ApiConfig::get()}}/Sociallogin?network=google'">
                                     <span class="svg-icon svg-icon-md">
                                         <i class="fab fa-google"></i>
                                     </span>
@@ -164,7 +165,7 @@
 
             <!-- Twitter login button -->
             <div>
-                <button type="button" class="btn bg-twitter font-weight-bolder pl-20 pr-20 mt-5 font-size-h6" onclick="location.href='{{authUser()->get()}}/social/Twitter'">
+                <button type="button" class="btn bg-twitter font-weight-bolder pl-20 pr-20 mt-5 font-size-h6" onclick="location.href='{{ApiConfig::get()}}/Sociallogin?network=twitter'">
                                     <span class="svg-icon svg-icon-md">
                                         <i class="fab fa-twitter"></i>
                                     </span>
@@ -174,7 +175,7 @@
             <!-- end:Twitter login button -->
             <!-- Git-hub login button -->
             <div>
-                <button type="button" class="btn bg-github font-weight-bolder pl-20 pr-20 mt-5 font-size-h6" onclick="location.href='{{authUser()->get()}}/social/GitHub'">
+                <button type="button" class="btn bg-github font-weight-bolder pl-20 pr-20 mt-5 font-size-h6" onclick="location.href='{{ApiConfig::get()}}/social/GitHub'">
                                     <span class="svg-icon svg-icon-md">
                                         <i class="fab fa-github"></i>
                                     </span>
